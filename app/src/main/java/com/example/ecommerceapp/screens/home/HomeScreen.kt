@@ -81,7 +81,7 @@ fun HomeScreen(
                     CategoryChip(
                         icon = categories[it].imageUrl,
                         text = categories[it].name,
-                        isSelected = selectedCategory.value == it,
+                        isSelected = selectedCategory.value == categories[it].id,
                         onClick =
                             {
                                 selectedCategory.value = categories[it].id
