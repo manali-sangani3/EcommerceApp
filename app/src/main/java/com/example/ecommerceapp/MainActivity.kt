@@ -5,6 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,8 +18,10 @@ import com.example.ecommerceapp.screens.home.HomeScreen
 import com.example.ecommerceapp.screens.navigation.Screens
 import com.example.ecommerceapp.screens.products.ProductDetailsScreen
 import com.example.ecommerceapp.screens.products.ProductScreen
+import com.example.ecommerceapp.screens.profile.LoginScreen
 import com.example.ecommerceapp.screens.profile.ProfileScreen
 import com.example.ecommerceapp.screens.profile.SignUpScreen
+import com.example.ecommerceapp.viewmodels.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,10 +35,26 @@ class MainActivity : ComponentActivity() {
             // Navigation System
             val navController = rememberNavController()
 
+            // AuthView Model
+            val authViewModel: AuthViewModel = hiltViewModel()
+
+            // properly observe the state
+            val isLoggedIn by remember {
+                derivedStateOf {
+                    authViewModel.isLoggedIn
+                }
+            }
+
+            // Dynamic start destination
+            val startDestination = if (isLoggedIn) {
+                Screens.Home.route
+            } else {
+                Screens.Login.route
+            }
+
             // Nav Host
             NavHost(
-                navController = navController,
-                startDestination = Screens.Home.route
+                navController = navController, startDestination = startDestination
             ) {
 
                 // define routes using composable(){}
@@ -47,10 +69,25 @@ class MainActivity : ComponentActivity() {
                     CartScreen(navController = navController)
                 }
                 composable(Screens.Profile.route) {
-                    ProfileScreen(navController = navController, onSignOut = {})
+                    ProfileScreen(
+                        navController = navController,
+                        onSignOut = {
+                            authViewModel.signOut()
+                            navController.navigate(Screens.Login.route)
+                        })
                 }
                 composable(Screens.CategoryList.route) {
-                    CategoryScreen(navController = navController)
+                    CategoryScreen(
+                        navController = navController,
+                        onCartClick = { navController.navigate(Screens.Cart.route) },
+                        onProfileClick = {
+                            // Switch for Logging in or display profile
+                            if (isLoggedIn) {
+                                navController.navigate(Screens.Profile.route)
+                            } else {
+                                navController.navigate(Screens.Login.route)
+                            }
+                        })
                 }
                 composable(
                     Screens.ProductDetails.route
@@ -74,7 +111,11 @@ class MainActivity : ComponentActivity() {
                         onNavigateToLogin = { navController.navigate(Screens.Login.route) },
                         onSignUpSuccess = { navController.navigate(Screens.Home.route) })
                 }
-                composable(Screens.Login.route) {}
+                composable(Screens.Login.route) {
+                    LoginScreen(
+                        onNavigateToSignUp = { navController.navigate(Screens.SignUp.route) },
+                        onLoginSuccess = { navController.navigate(Screens.Home.route) })
+                }
             }
         }
     }

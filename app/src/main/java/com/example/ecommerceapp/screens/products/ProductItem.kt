@@ -73,6 +73,26 @@ fun ProductItem(
                         )
                     )
             )
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(
+                    onClick = { onAddToCart() },
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopEnd)
+                        .padding(8.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                            shape = CircleShape
+                        ),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        "Add to Cart",
+                        tint = Color.White
+                    )
+                }
+            }
             // Product Name and Price
             Column(
                 modifier = Modifier
@@ -92,27 +112,6 @@ fun ProductItem(
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    IconButton(
-                        onClick = { onAddToCart() },
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopEnd)
-                            .padding(8.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
-                                shape = CircleShape
-                            ),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            "Add to Cart",
-                            tint = Color.White
-                        )
-                    }
-                }
             }
         }
     }

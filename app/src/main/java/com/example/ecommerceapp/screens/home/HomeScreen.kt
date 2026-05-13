@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import com.example.ecommerceapp.screens.navigation.Screens
 import com.example.ecommerceapp.viewmodels.CategoryViewModel
 import com.example.ecommerceapp.viewmodels.ProductViewModel
+import com.example.ecommerceapp.viewmodels.SearchViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -32,7 +33,8 @@ fun HomeScreen(
     onProfileClick: () -> Unit,
     onCartClick: () -> Unit,
     productViewModel: ProductViewModel = hiltViewModel(),
-    categoryViewModel: CategoryViewModel = hiltViewModel()
+    categoryViewModel: CategoryViewModel = hiltViewModel(),
+    searchViewModel: SearchViewModel = hiltViewModel()
 ) {
 
     Scaffold(
@@ -42,7 +44,7 @@ fun HomeScreen(
                 onCartClick = onCartClick
             )
         },
-        bottomBar = { BottomNavBar() }
+        bottomBar = { BottomNavBar(navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -54,14 +56,24 @@ fun HomeScreen(
             val focusManager = LocalFocusManager.current
             SearchBar(
                 query = searchQuery.value,
-                onQueryChange = { searchQuery.value = it },
-                onSearchFocusChange = {},
-                onSearch = {},
+                onQueryChange = {
+                    searchQuery.value = it
+                    searchViewModel.searchProducts(it)
+                },
+                onSearch = {
+                    searchViewModel.searchProducts(searchQuery.value)
+                    focusManager.clearFocus()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            // Search Result Section
+            if (searchQuery.value.isNotBlank()) {
+                SearchResultsSection(navController)
+            }
+
             // Categories Section
             SectionTitle("Categories", "See All") {
                 navController.navigate(Screens.CategoryList.route)
@@ -79,7 +91,6 @@ fun HomeScreen(
             ) {
                 items(categories.size) {
                     CategoryChip(
-                        icon = categories[it].imageUrl,
                         text = categories[it].name,
                         isSelected = selectedCategory.value == categories[it].id,
                         onClick =
@@ -104,7 +115,7 @@ fun HomeScreen(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
-            // Fetch products when the screen IS TIPSL displayed
+            // Fetch products when the screen is displayed
             productViewModel.getAllProductsInFirestore()
             val allProductsState = productViewModel.allProducts.collectAsState()
 

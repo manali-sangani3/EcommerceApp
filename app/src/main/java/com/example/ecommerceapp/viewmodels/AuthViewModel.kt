@@ -40,7 +40,7 @@ class AuthViewModel @Inject constructor(
     val currentUser = auth.currentUser?.let { firebaseUser ->
         UserProfile(
             uid = firebaseUser.uid,
-            name = firebaseUser.displayName ?: "",
+            name = firebaseUser.displayName ?: "User",
             email = firebaseUser.email ?: ""
         )
     }

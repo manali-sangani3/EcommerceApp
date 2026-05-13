@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -25,13 +26,20 @@ import com.example.ecommerceapp.viewmodels.CategoryViewModel
 @Composable
 fun CategoryScreen(
     navController: NavController,
-    categoryViewModel: CategoryViewModel = hiltViewModel()
-) {
+    categoryViewModel: CategoryViewModel = hiltViewModel(),
+    onCartClick: () -> Unit,
+    onProfileClick: () -> Unit,
+
+    ) {
 
     val categoriesState = categoryViewModel.categories.collectAsState()
     val categories = categoriesState.value
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+    ) {
         if (categories.isEmpty()) {
             Box(
                 modifier = Modifier

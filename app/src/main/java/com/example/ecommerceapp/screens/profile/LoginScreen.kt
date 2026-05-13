@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -49,6 +50,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .safeDrawingPadding()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -92,6 +94,7 @@ fun LoginScreen(
             onClick = {
                 authViewModel.login(email, password)
             },
+            enabled = email.isNotEmpty() && password.isNotEmpty() && authState !is AuthViewModel.AuthState.Loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)

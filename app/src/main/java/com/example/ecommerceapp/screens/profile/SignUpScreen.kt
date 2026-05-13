@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +59,7 @@ fun SignUpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .safeDrawingPadding()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -73,8 +75,7 @@ fun SignUpScreen(
             onValueChange = { email = it },
             label = { Text("Email") },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
+                keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -86,8 +87,7 @@ fun SignUpScreen(
             onValueChange = { password = it },
             label = { Text("Password") },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
+                keyboardType = KeyboardType.Password, imeAction = ImeAction.Next
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,8 +101,7 @@ fun SignUpScreen(
             label = { Text("Confirm Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -112,12 +111,10 @@ fun SignUpScreen(
             supportingText = {
                 passwordError?.let {
                     Text(
-                        text = it,
-                        color = MaterialTheme.colorScheme.error
+                        text = it, color = MaterialTheme.colorScheme.error
                     )
                 }
-            }
-        )
+            })
 
         Spacer(Modifier.height(16.dp))
         Button(
@@ -125,24 +122,23 @@ fun SignUpScreen(
                 if (password != confirmPassword) {
                     passwordError = "Passwords do not match"
                 } else if (password.length < 6) {
-                    passwordError = "Password should be at least characters"
+                    passwordError = "Password should be at least 6 characters"
                 } else {
                     passwordError = null
-                    authViewModel.signUp("User", email, password)
+                    authViewModel.signUp(name = "User", email, password)
 
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-//            enabled = email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() &&
-//                    authState !is AuthState.Loading
+            enabled = email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && authState !is AuthViewModel.AuthState.Loading
         ) {
             Text("Sign Up")
-            Spacer(Modifier.height(16.dp))
-            TextButton(onClick = onNavigateToLogin) {
-                Text("Already have an account? Login")
-            }
+        }
+        Spacer(Modifier.height(16.dp))
+        TextButton(onClick = onNavigateToLogin) {
+            Text("Already have an account? Login")
         }
     }
 }

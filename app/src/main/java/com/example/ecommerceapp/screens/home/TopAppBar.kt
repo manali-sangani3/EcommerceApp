@@ -13,6 +13,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import com.example.ecommerceapp.ui.theme.PrimaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +33,7 @@ fun MyTopAppBar(
 
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFF1565c0),
+            containerColor = PrimaryColor,
             titleContentColor = Color.White
         ),
         actions = {

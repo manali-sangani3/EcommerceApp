@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -52,6 +53,7 @@ fun ProductDetailsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .safeDrawingPadding()
                 .padding(16.dp)
         ) {
             // Product Image
@@ -95,7 +97,7 @@ fun ProductDetailsScreen(
                 cartViewModel.addToCart(product)
             },
             modifier = Modifier
-                .padding(16.dp)
+                .padding(vertical = 50.dp, horizontal = 16.dp)
                 .background(
                     color = MaterialTheme.colorScheme.primary,
                     shape = CircleShape

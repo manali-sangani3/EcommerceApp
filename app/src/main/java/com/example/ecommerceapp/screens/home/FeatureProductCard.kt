@@ -50,12 +50,12 @@ fun FeatureProductCard(
                     .padding(8.dp)
                     .zIndex(2f)
             )
-
             Column(
                 modifier = Modifier
                     .padding(16.dp)
                     .zIndex(1f)
             ) {
+                Spacer(modifier = Modifier.height(20.dp))
                 Image(
                     painter = rememberAsyncImagePainter(product.imageUrl),
                     contentDescription = product.name,

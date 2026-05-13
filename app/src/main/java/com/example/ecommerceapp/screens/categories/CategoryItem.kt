@@ -51,7 +51,7 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-// Background Gradient Overlay
+        // Background Gradient Overlay
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -80,7 +80,7 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
                     Image(
                         painter = rememberAsyncImagePainter(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(category.imageUrl)
+                                .data(category.iconUrl)
                                 .crossfade(true)
                                 .build()
                         ),
